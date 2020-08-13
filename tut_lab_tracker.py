@@ -30,7 +30,7 @@ class Module_Info():
 class MainApp():
     def __init__(self):
         self.page = tk.Tk()
-        self.page.title("Tut/Lab Rank Asst.")
+        self.page.title("Tut/Lab Slot Tracker")
         self.page.resizable(False,True)
         self.mod_slots = []
 
@@ -42,7 +42,7 @@ class MainApp():
     def setup_slot_adder(self):
         self.slot_adder_container = tk.Frame(master=self.page,borderwidth=3,relief=tk.RIDGE,width=300)
         self.slot_adder = tk.Frame(master=self.slot_adder_container,width=300)
-        intro_label = tk.Label(master=self.slot_adder,name="intro_label",text="Add tutorial/lab slots (w/colors) here:")
+        intro_label = tk.Label(master=self.slot_adder,name="intro_label",text="Add tutorial/lab slots here:")
         mod_code_label = tk.Label(master=self.slot_adder,name="mod_code_label",text="Module Code",fg="black")
         mod_code_entry = tk.Entry(master=self.slot_adder,name="mod_code_entry")
         slot_code_label = tk.Label(master=self.slot_adder,name="slot_code_label",text="Tut/Lab slot",fg="black")
