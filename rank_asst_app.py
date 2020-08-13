@@ -1,7 +1,4 @@
 import tkinter as tk
-import pandas as pd
-import xlsxwriter
-
 from tkinter.colorchooser import askcolor
 
 class Module_Info():
