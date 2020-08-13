@@ -14,7 +14,6 @@ class Module_Info():
         self.mod_color = mod_color
         self.slot_code = slot_code
         self.slot_color = slot_color
-        self.exists = True
         self.setup_pack_widgets()
 
     def setup_pack_widgets(self):
@@ -25,7 +24,6 @@ class Module_Info():
 
     def remove(self):
         self.frame.destroy()
-        self.exists = False
 
 class MainApp():
     def __init__(self):
@@ -74,12 +72,16 @@ class MainApp():
         self.ranking_container = tk.Frame(master=self.page,borderwidth=3,relief=tk.RIDGE,width=300)
         self.ranking_canvas = tk.Canvas(master=self.ranking_container,borderwidth=0,width=300)
         self.ranking_frame = tk.Frame(master=self.ranking_canvas,width=300)
-        cont_label = tk.Label(master=self.ranking_container,text="Tutorial/Lab Slots selected:")
+        
+        self.cont_label_var = tk.StringVar()
+        self.cont_label_var.set("{} Tutorial/Lab Slots selected:".format(len(self.mod_slots)))
+        cont_label = tk.Label(master=self.ranking_container,textvariable=self.cont_label_var)
         cont_label.pack(side=tk.TOP)
-        self.ranking_vsb = tk.Scrollbar(self.ranking_container,orient="vertical",command=self.ranking_canvas.yview)
-        self.ranking_canvas.configure(yscrollcommand=self.ranking_vsb.set)
+        
+        ranking_vsb = tk.Scrollbar(self.ranking_container,orient="vertical",command=self.ranking_canvas.yview)
+        self.ranking_canvas.configure(yscrollcommand=ranking_vsb.set)
 
-        self.ranking_vsb.pack(side=tk.RIGHT,fill=tk.Y)
+        ranking_vsb.pack(side=tk.RIGHT,fill=tk.Y)
         self.ranking_canvas.pack(side=tk.LEFT,fill=tk.BOTH,expand=True)
         self.ranking_canvas.create_window((3,3),window=self.ranking_frame,anchor=tk.CENTER,tags="self.ranking_frame")
         self.ranking_frame.bind("<Configure>",self.onFrameConfigure)
@@ -117,11 +119,12 @@ class MainApp():
         slot_move_subframe.pack(side=tk.LEFT)
 
         self.mod_slots.append(slot_frame)
-        self.reorder_mod_slots()
+        self.refresh_mod_slots()
 
     def delete_slot(self,slot_frame):
         self.mod_slots.remove(slot_frame)
         slot_frame.destroy()
+        self.refresh_mod_slots()
 
     def move_slot(self,slot_frame,direction):
         idx = self.mod_slots.index(slot_frame)
@@ -129,14 +132,15 @@ class MainApp():
             self.mod_slots[idx], self.mod_slots[idx-1] = self.mod_slots[idx-1], self.mod_slots[idx]
         elif direction == 'down' and idx != (len(self.mod_slots)-1):
             self.mod_slots[idx], self.mod_slots[idx+1] = self.mod_slots[idx+1], self.mod_slots[idx]
-        self.reorder_mod_slots()
+        self.refresh_mod_slots()
 
     
-    def reorder_mod_slots(self):
+    def refresh_mod_slots(self):
         for mod_slot in self.mod_slots:
             mod_slot.forget()
         for mod_slot in self.mod_slots:
             mod_slot.pack(side=tk.TOP,anchor=tk.CENTER)
+        self.cont_label_var.set("{} Tutorial/Lab Slots selected:".format(len(self.mod_slots)))
 
 if __name__ == '__main__':
     MainApp_window = MainApp()
